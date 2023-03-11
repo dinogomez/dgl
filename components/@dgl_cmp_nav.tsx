@@ -50,7 +50,7 @@ const NavbarComponent = () => {
                         /* if user object doesnt exist */
                         <>
                             <Navbar.Link href="/login" >
-                                <Button auto   color="warning">
+                                <Button auto   color="success">
                                     Login
                                 </Button>
                             </Navbar.Link> 

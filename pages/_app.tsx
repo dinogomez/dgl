@@ -31,10 +31,10 @@ function MyApp({ Component, pageProps }: AppProps) {
       >
         
         <NextUIProvider >
-          {/* Navbar */}
+          {/* Navbar theme={darkTheme}*/ }
           <Navbar />
           {/* Container */}
-          <Box css={{px: "$12", py: "$15", mt: "$12", "@xsMax": {px: "$10"}, maxWidth: "1000px", margin: "0 auto"}}>
+          <Box css={{px: "$12", py: "$15", mt: "$12", "@xsMax": {px: "$10"}, maxWidth: "70%", margin: "0 auto"}}>
             <Component {...pageProps} />
           </Box>
         </NextUIProvider>

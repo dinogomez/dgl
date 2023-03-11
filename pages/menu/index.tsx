@@ -1,16 +1,15 @@
 import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react"; 
 import { createServerSupabaseClient, withPageAuth } from "@supabase/auth-helpers-nextjs";
-import { Table, Text, Dropdown, Loading, Grid } from "@nextui-org/react"
+import { Table, Text, Dropdown, Loading, Grid, Spacer } from "@nextui-org/react"
 import { useRouter } from "next/router";
 import { GetServerSidePropsContext } from 'next';
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useReducer } from "react";
 
 import Link from "next/link";
 import TableDropdown from "../../components/@dgl_cmp_table_dropdown";
 import React from "react";
 import TableDynamic from "../../components/@dgl_cmp_table_dynamic";
 
-export const revalidate = 0
 
 export default function Menu() {
     //Supabase Database Handler
@@ -23,73 +22,100 @@ export default function Menu() {
     const [tableCols, setTableCols] = useState<any[]>([]);
     const [tableRows, setTableRows] = useState<any[]>([]);        
     const [selected, setSelected] = useState<any>(new Set(['']));
-    
+    const [ignored, forceUpdate] = useReducer(x=> x+1, 0);
+
+    const removeFromRows = (id:any) => {
+      setTableRows((prevState) =>
+      prevState.filter((prevItem) => prevItem !== id)
+    );
+      deleteRowFromTable(id)
+    };
+
+    const deleteRowFromTable = async (id:any) => {
+      try{
+        const { data, error} = await supabaseClient
+          .from(selectedValue)
+          .delete()
+          .eq("id", id);
+        if(error) throw error;
+      }catch(error:any){
+        alert(error.message);
+      }
+    }
     
     let selectedValue = useMemo(
       () => Array.from(selected).join("").replaceAll("_", " "),[selected]
     );
 
 
+    const getData = async() => {
+      if(selectedValue){
+      let { data, error } = await supabaseClient.from(selectedValue).select("*");
+      if(data != null && data != undefined){
 
-   
-   
-    
-    useEffect(()=>{   
-      const getTables = async() => {
-        try{
-          let { data, error } = await supabaseClient.rpc('gettables')
-       
-          if(data != null){
-            setDbTables(data);
-            if(selectedValue === undefined){
-              selectedValue = data[0].table_name;
-              setSelected(data[0].table_name)
-            }
+
+        let columns:any = [];
+
+        Object.keys(data[0]).forEach(element => {
+          let data = {
+            key: element,
+            label: element.toUpperCase()
           }
-  
-        }catch(error: any){
-          <Loading>Loading</Loading>
+          columns.push(data);
+        });
+
+        const action = {
+          key: "action",
+          label: "ACTION"
         }
-      }
-  
-  
-      
-      
-      //const {tableCols, tableRows} = props;
-        const getData = async() => {
-          if(selectedValue){
-          let { data, error } = await supabaseClient.from(selectedValue).select("*");
-          if(data != null && data != undefined){
-  
-  
-            let columns:any = [];
-  
-            Object.keys(data[0]).forEach(element => {
-              let data = {
-                key: element,
-                label: element.toUpperCase()
-              }
-              columns.push(data);
-            });
-  
-  
-            setTableCols(columns);
-            setTableRows(data);
+    
+        columns.push(action);
 
-          } else {
-            getData();
-          }
-        
+        setTableCols(columns);
+        setTableRows(data);
+
+      } else {
+        getData();
+      }
+    
+  }
+}
+const getTables = async() => {
+  try{
+    let { data, error } = await supabaseClient.rpc('gettables')
+ 
+    if(data != null){
+      setDbTables(data);
+      if(selectedValue === undefined){
+        selectedValue = data[0].table_name;
+        setSelected(data[0].table_name)
       }
     }
 
+  }catch(error: any){
+    <Loading>Loading</Loading>
+  }
+}
+   
+    
+    useEffect(()=>{   
+      
+      //const {tableCols, tableRows} = props;
+      
       if(typeof selectedValue !== "undefined") {
         getTables();
         getData();
 
     }
-    
+
+      
     },[selected]) 
+
+    useEffect(()=>{
+      getData();
+    },[tableRows])
+
+  
     console.log(dbtables)
     console.log(selectedValue);
     console.log(tableCols);
@@ -161,7 +187,7 @@ export default function Menu() {
         <Dropdown>
         <Dropdown.Button  color="secondary">        
         {
-          !selectedValue ? "Select Database" : selectedValue
+          !selectedValue ? "Select Table" : selectedValue
         }
         </Dropdown.Button>
         <Dropdown.Menu 
@@ -184,7 +210,7 @@ export default function Menu() {
             
     {/*<TableDynamic columns={tableCols} rows={tableRows} />*/}
     {
-      tableCols.length === 0 ? <Text></Text> : <TableDynamic tableCols={tableCols} tableRows={tableRows} />
+      tableCols.length === 0 ? <Text></Text>: <TableDynamic table={selectedValue} tableCols={tableCols} tableRows={tableRows} removeRow={removeFromRows}/>
     }
       
     </>
@@ -210,7 +236,7 @@ if (!session)
 return {
     props: {
     initialSession: session,
-    user: session.user
-    }
+    user: session.user,
+    },
 };
 };

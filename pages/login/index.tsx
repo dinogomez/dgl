@@ -20,15 +20,9 @@ export default function Login() {
         <Auth 
            appearance={{
             theme: ThemeSupa,
-            variables: {
-              default: {
-                colors: {
-                  brand: '#F5A524',
-                  brandAccent: '#F9CB80',
-                },
-              },
-            },
-          }}
+           }}
+          theme="dark"
+
            supabaseClient={supabaseClient}
            providers={[]}
         />
