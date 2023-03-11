@@ -184,28 +184,7 @@ export default function Menu() {
             
     {/*<TableDynamic columns={tableCols} rows={tableRows} />*/}
     {
-      tableCols.length === 0 ? <Text></Text> : 
-      <Table
-        compact
-        aria-label="Example table with dynamic content"
-        css={{
-          height: "auto",
-          minWidth: "100%",
-        }}
-      >
-        <Table.Header columns={tableCols}>
-          {(column:any) => (
-            <Table.Column key={column.key}>{column.label}</Table.Column>
-          )}
-        </Table.Header>
-        <Table.Body items={tableRows}>
-          {(item: any) => (
-            <Table.Row key={item.id}>
-              {(columnKey) => <Table.Cell>{item[columnKey]}</Table.Cell>}
-            </Table.Row>
-          )}
-        </Table.Body>
-      </Table>
+      tableCols.length === 0 ? <Text></Text> : <TableDynamic tableCols={tableCols} tableRows={tableRows} />
     }
       
     </>

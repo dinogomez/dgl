@@ -7,6 +7,12 @@ import { Box } from "../components/@dgl_cmp_box";
 import  Navbar from "../components/@dgl_cmp_nav";
 import { useSSR } from '@nextui-org/react'
 
+const darkTheme = createTheme({
+  type: 'dark',
+  theme: {
+    colors: {},
+  }
+})
 
 function MyApp({ Component, pageProps }: AppProps) {
   
@@ -24,7 +30,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         supabaseClient={supabaseClient}
       >
         
-        <NextUIProvider>
+        <NextUIProvider >
           {/* Navbar */}
           <Navbar />
           {/* Container */}
