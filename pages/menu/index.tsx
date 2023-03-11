@@ -1,6 +1,6 @@
 import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react"; 
-import { createServerSupabaseClient, withPageAuth } from "@supabase/auth-helpers-nextjs";
-import { Table, Text, Dropdown, Loading, Grid, Spacer } from "@nextui-org/react"
+import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
+import { Table, Text, Dropdown, Loading, Grid, Spacer, Button, } from "@nextui-org/react"
 import { useRouter } from "next/router";
 import { GetServerSidePropsContext } from 'next';
 import { useState, useEffect, useMemo, useReducer } from "react";
@@ -9,6 +9,7 @@ import Link from "next/link";
 import TableDropdown from "../../components/@dgl_cmp_table_dropdown";
 import React from "react";
 import TableDynamic from "../../components/@dgl_cmp_table_dynamic";
+import ModalCellEdit from "../../components/@dgl_cmp_table_modal_cell_edit";
 
 
 export default function Menu() {
@@ -20,9 +21,21 @@ export default function Menu() {
     
     const [dbtables, setDbTables] = useState<any[]>([]);
     const [tableCols, setTableCols] = useState<any[]>([]);
+    const [selectedRow, setSelectedRow] = useState<any>([]);
     const [tableRows, setTableRows] = useState<any[]>([]);        
     const [selected, setSelected] = useState<any>(new Set(['']));
     const [ignored, forceUpdate] = useReducer(x=> x+1, 0);
+    const [visible, setVisible] = useState(false);
+    const [selectedId, setSelectedId] = useState(0);
+
+    const handler = (row:any) => {
+      setVisible(true);
+      setSelectedRow(row);
+    }
+    const closeHandler = () => {
+      setVisible(false);
+      console.log("closed");
+    };
 
     const removeFromRows = (id:any) => {
       setTableRows((prevState) =>
@@ -101,7 +114,7 @@ const getTables = async() => {
     useEffect(()=>{   
       
       //const {tableCols, tableRows} = props;
-      
+      console.log(selectedRow);
       if(typeof selectedValue !== "undefined") {
         getTables();
         getData();
@@ -116,10 +129,6 @@ const getTables = async() => {
     },[tableRows])
 
   
-    console.log(dbtables)
-    console.log(selectedValue);
-    console.log(tableCols);
-    console.log(tableRows);
 
 
 
@@ -131,48 +140,7 @@ const getTables = async() => {
     },[selectedValue]) 
     */
 
-    /** DUMMY DATA 
-    const columns = [
-      {
-        key: "name",
-        label: "NAME",
-      },
-      {
-        key: "role",
-        label: "ROLE",
-      },
-      {
-        key: "status",
-        label: "STATUS",
-      },
-    ];
-    const rows = [
-      {
-        key: "1",
-        name: "Tony Reichert",
-        role: "CEO",
-        status: "Active",
-      },
-      {
-        key: "2",
-        name: "Zoey Lang",
-        role: "Technical Lead",
-        status: "Paused",
-      },
-      {
-        key: "3",
-        name: "Jane Fisher",
-        role: "Senior Developer",
-        status: "Active",
-      },
-      {
-        key: "4",
-        name: "William Howard",
-        role: "Community Manager",
-        status: "Vacation",
-      },
-    ];
-*/
+
 
 
 
@@ -185,7 +153,7 @@ const getTables = async() => {
         <hr />
         <br />
         <Dropdown>
-        <Dropdown.Button  color="secondary">        
+        <Dropdown.Button  shadow color="secondary">        
         {
           !selectedValue ? "Select Table" : selectedValue
         }
@@ -207,10 +175,23 @@ const getTables = async() => {
           )}
         </Dropdown.Menu>
     </Dropdown>
+
+
+    <ModalCellEdit visible={visible} closeHandler={closeHandler} menu={selectedRow}/>
+   
             
     {/*<TableDynamic columns={tableCols} rows={tableRows} />*/}
     {
-      tableCols.length === 0 ? <Text></Text>: <TableDynamic table={selectedValue} tableCols={tableCols} tableRows={tableRows} removeRow={removeFromRows}/>
+      tableCols.length === 0 
+      ? 
+      <Text></Text>
+      : 
+      <TableDynamic 
+        table={selectedValue} 
+        tableCols={tableCols} 
+        tableRows={tableRows} 
+        removeRow={removeFromRows} 
+        editRow={handler}/>
     }
       
     </>

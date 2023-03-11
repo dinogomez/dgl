@@ -9,23 +9,24 @@ import { updateFunctionExpression } from "typescript";
 
 
 
-export default function TableDynamic({table, tableCols, tableRows, removeRow}) {
+export default function TableDynamic({params, tableCols, tableRows, removeRow, editRow}:any) {
     
 
     const [supabaseClient] = useState(() => createBrowserSupabaseClient());
     
     const renderCell = (item:any, columnKey:any) => {
-      const cellValue = item[columnKey];
+    const cellValue = item[columnKey];
+    
       switch (columnKey) {
        
         case "action":
-          console.log("Action Called")
           return (
             <Row justify="center" align="center">
               <Col css={{ d: "flex" }}>
-                <Tooltip content="Edit user">
-                  <IconButton onClick={() => console.log("Edit user", item.id)}>
-                    <EditIcon size={20} fill="#979797" />
+                <Tooltip content="Edit user"
+                  color="primary">
+                  <IconButton onClick={() => editRow(item)}>
+                    <EditIcon size={20} fill="#0072F5" />
                   </IconButton>
                 </Tooltip>
               </Col>
@@ -43,7 +44,6 @@ export default function TableDynamic({table, tableCols, tableRows, removeRow}) {
             </Row>
           );
         default:
-          console.log("Defaulted");
           return (
            item[columnKey]
           );
@@ -76,6 +76,13 @@ export default function TableDynamic({table, tableCols, tableRows, removeRow}) {
             </Table.Row>
           )}
         </Table.Body>
+        <Table.Pagination
+        shadow
+        noMargin
+        align="center"
+        rowsPerPage={5}
+        onPageChange={(page) => console.log({ page })}
+      />
       </Table>
         
         
