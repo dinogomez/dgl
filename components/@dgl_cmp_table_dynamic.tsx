@@ -47,45 +47,16 @@ export default function TableDynamic({
         return item[columnKey];
     }
   };
-
-<<<<<<< HEAD
    
 
   const isPaginated:any = () => {
     if(tableRows.length > 5){
       return(<Table.Pagination
-=======
-  return (
-    <Table
-      compact
-      aria-label="Example table with dynamic content"
-      css={{
-        height: "auto",
-        minWidth: "100%",
-      }}
-    >
-      <Table.Header columns={tableCols}>
-        {(column: any) => (
-          <Table.Column key={column.key}>{column.label}</Table.Column>
-        )}
-      </Table.Header>
-      <Table.Body items={tableRows}>
-        {(item: any) => (
-          <Table.Row key={item.id}>
-            {(columnKey) => (
-              <Table.Cell>{renderCell(item, columnKey)}</Table.Cell>
-            )}
-          </Table.Row>
-        )}
-      </Table.Body>
-      <Table.Pagination
->>>>>>> ea51c0706c72ba30d961b38c62691e0c1afe97df
         shadow
         noMargin
         align="center"
         rowsPerPage={5}
         onPageChange={(page) => console.log({ page })}
-<<<<<<< HEAD
       />)
     }
   }
@@ -119,9 +90,4 @@ export default function TableDynamic({
         
         
     )
-=======
-      />
-    </Table>
-  );
->>>>>>> ea51c0706c72ba30d961b38c62691e0c1afe97df
 }
