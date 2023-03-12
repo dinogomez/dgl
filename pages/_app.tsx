@@ -25,7 +25,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     isBrowser && (
       <SessionContextProvider supabaseClient={supabaseClient}>
-        <NextUIProvider>
+        <NextUIProvider theme={darkTheme}>
           {/* Navbar theme={darkTheme}*/}
           <Navbar />
           {/* Container */}
