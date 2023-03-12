@@ -35,7 +35,7 @@ export default function ModalCellEdit({closeHandler,visible, menu}:any) {
       onClose={closeHandler}
     >
       <Modal.Header>
-        <Text>Update Row</Text>
+        <Text h3>Update Row</Text>
       </Modal.Header>
       <Modal.Body>
       <>

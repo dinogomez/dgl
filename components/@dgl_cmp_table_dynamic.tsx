@@ -54,6 +54,18 @@ export default function TableDynamic({params, tableCols, tableRows, removeRow, e
 
    
 
+  const isPaginated:any = () => {
+    if(tableRows.length > 5){
+      return(<Table.Pagination
+        shadow
+        noMargin
+        align="center"
+        rowsPerPage={5}
+        onPageChange={(page) => console.log({ page })}
+      />)
+    }
+  }
+
     return(
         <Table
         compact
@@ -76,13 +88,9 @@ export default function TableDynamic({params, tableCols, tableRows, removeRow, e
             </Table.Row>
           )}
         </Table.Body>
-        <Table.Pagination
-        shadow
-        noMargin
-        align="center"
-        rowsPerPage={5}
-        onPageChange={(page) => console.log({ page })}
-      />
+        {
+          isPaginated()
+        }
       </Table>
         
         
