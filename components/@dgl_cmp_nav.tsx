@@ -27,7 +27,7 @@ const NavbarComponent = () => {
 
       {/* 
                 <Navbar.Content>
-                    <Navbar.Link href="/about">About</Navbar.Link>
+                    <Navbar.Link href="/about">About</Navbar.Link> 
                 </Navbar.Content>
                 */}
       <Navbar.Content>

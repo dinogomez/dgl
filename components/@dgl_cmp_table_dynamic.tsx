@@ -47,47 +47,45 @@ export default function TableDynamic({
         return item[columnKey];
     }
   };
-   
 
-  const isPaginated:any = () => {
-    if(tableRows.length > 5){
-      return(<Table.Pagination
-        shadow
-        noMargin
-        align="center"
-        rowsPerPage={5}
-        onPageChange={(page) => console.log({ page })}
-      />)
+  const isPaginated: any = () => {
+    if (tableRows.length > 5) {
+      return (
+        <Table.Pagination
+          shadow
+          noMargin
+          align="center"
+          rowsPerPage={5}
+          onPageChange={(page) => console.log({ page })}
+        />
+      );
     }
-  }
+  };
 
-    return(
-        <Table
-        compact
-        aria-label="Example table with dynamic content"
-        css={{
-          height: "auto",
-          minWidth: "100%",
-        }}
-      >
-        <Table.Header columns={tableCols}>
-          {(column:any) => (
-            <Table.Column key={column.key}>{column.label}</Table.Column>
-          )}
-
-        </Table.Header>
-        <Table.Body items={tableRows}>
-          {(item: any) => (
-            <Table.Row key={item.id}>
-              {(columnKey) => <Table.Cell>{renderCell(item, columnKey)}</Table.Cell>}
-            </Table.Row>
-          )}
-        </Table.Body>
-        {
-          isPaginated()
-        }
-      </Table>
-        
-        
-    )
+  return (
+    <Table
+      compact
+      aria-label="Example table with dynamic content"
+      css={{
+        height: "auto",
+        minWidth: "100%",
+      }}
+    >
+      <Table.Header columns={tableCols}>
+        {(column: any) => (
+          <Table.Column key={column.key}>{column.label}</Table.Column>
+        )}
+      </Table.Header>
+      <Table.Body items={tableRows}>
+        {(item: any) => (
+          <Table.Row key={item.id}>
+            {(columnKey) => (
+              <Table.Cell>{renderCell(item, columnKey)}</Table.Cell>
+            )}
+          </Table.Row>
+        )}
+      </Table.Body>
+      {isPaginated()}
+    </Table>
+  );
 }
